@@ -26,15 +26,19 @@
 <meta property="og:site_name" content="Hearthewind&#39;s Blog">
 <meta property="og:description" content="通过博弈论激励实现公平与隐私保护的联邦学习作者：马瑞阳单位：华东理工大学计算机科学与技术系，中国上海邮箱：{maruiyang}@ecust.edu.com 摘要联邦学习允许多个分布式参与者在不集中各自私有数据的情况下协同训练机器学习模型。然而，由于隐私顾虑和缺乏足够的激励，参与者可能不愿意贡献数据或训练精力。本文中，我们将此问题建模为一个自利参与者之间的非合作博弈，每个参与者决定贡献多少数据或牺">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/Test-Accuracy%20vs%20Rounds.png">
-<meta property="og:image" content="http://example.com/100rounds.png">
-<meta property="og:image" content="http://example.com/plot2_selected_noniid_comparison.png">
-<meta property="og:image" content="http://example.com/time_cost.png">
+<meta property="og:image" content="http://example.com/images/Test-Accuracy%20vs%20Rounds.png">
+<meta property="og:image" content="http://example.com/images/100rounds.png">
+<meta property="og:image" content="http://example.com/images/plot2_selected_noniid_comparison.png">
+<meta property="og:image" content="http://example.com/images/time_cost.png">
 <meta property="article:published_time" content="2025-05-09T06:20:46.000Z">
-<meta property="article:modified_time" content="2025-05-09T06:21:11.095Z">
+<meta property="article:modified_time" content="2025-05-17T06:05:48.336Z">
 <meta property="article:author" content="Hearthewind">
+<meta property="article:tag" content="联邦学习">
+<meta property="article:tag" content="博弈论">
+<meta property="article:tag" content="隐私保护">
+<meta property="article:tag" content="激励机制">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/Test-Accuracy%20vs%20Rounds.png">
+<meta name="twitter:image" content="http://example.com/images/Test-Accuracy%20vs%20Rounds.png">
 
 
 <link rel="canonical" href="http://example.com/2025/05/09/%E9%80%9A%E8%BF%87%E5%8D%9A%E5%BC%88%E8%AE%BA%E6%BF%80%E5%8A%B1%E5%AE%9E%E7%8E%B0%E5%85%AC%E5%B9%B3%E4%B8%8E%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4%E7%9A%84%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0/">
@@ -67,6 +71,12 @@
   
 
 
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
 
 
 
@@ -148,7 +158,7 @@
         <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
@@ -203,9 +213,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2025-05-09 14:20:46 / Modified: 14:21:11" itemprop="dateCreated datePublished" datetime="2025-05-09T14:20:46+08:00">2025-05-09</time>
+      <time title="Created: 2025-05-09 14:20:46" itemprop="dateCreated datePublished" datetime="2025-05-09T14:20:46+08:00">2025-05-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-05-17 14:05:48" itemprop="dateModified" datetime="2025-05-17T14:05:48+08:00">2025-05-17</time>
     </span>
 
   
@@ -237,28 +253,28 @@
 <h3 id="2-3-联邦学习中的差分隐私"><a href="#2-3-联邦学习中的差分隐私" class="headerlink" title="2.3 联邦学习中的差分隐私"></a>2.3 联邦学习中的差分隐私</h3><p>差分隐私 (DP) 限制了关于任何个体数据的任何信息泄露。在 FL 中，DP 通常涉及向客户端更新添加高斯噪声。其定义是：一个随机机制 $\mathcal{M}$ 是 $(\epsilon,\delta)$-DP，如果对于任何两个仅相差一条记录的数据集 $D, D’$，以及任何输出集 $S$，都有<br>$$ \Pr[\mathcal{M}(D)\in S]\le e^\epsilon\Pr[\mathcal{M}(D’)\in S]+\delta \quad (\text{式 } 1) $$<br>[dwork2014]。注入噪声不可避免地会降低准确性 [wei2020,hu2020]。我们的机制允许客户端通过 $c_i$ 将潜在隐私损失（如果应用了DP参数，则与之相关）的感知成本计入其效用计算中。</p>
 <h3 id="2-4-协作学习中的公平性"><a href="#2-4-协作学习中的公平性" class="headerlink" title="2.4 协作学习中的公平性"></a>2.4 协作学习中的公平性</h3><p>FL 中的<strong>公平性</strong>可能涉及过程和结果两个方面。Jain 公平性指数<br>$$ J&#x3D;\frac{(\sum_i x_i)^2}{N\sum_i x_i^2} \quad (\text{式 } 2) $$<br>是常用于衡量贡献水平（$x_i &#x3D; q_i$）或奖励的一个指标。像 Yu 等人 [yu2020fair] 的工作将公平性构建到激励方案中。我们的基础模型在同质性假设下内在地实现了贡献公平性，而带惩罚的效用模型则允许探索公平性权衡。</p>
 <h2 id="3-方法论：基于博弈论激励的差分隐私联邦学习机制"><a href="#3-方法论：基于博弈论激励的差分隐私联邦学习机制" class="headerlink" title="3. 方法论：基于博弈论激励的差分隐私联邦学习机制"></a>3. 方法论：基于博弈论激励的差分隐私联邦学习机制</h2><h3 id="3-1-系统模型和问题描述"><a href="#3-1-系统模型和问题描述" class="headerlink" title="3.1 系统模型和问题描述"></a>3.1 系统模型和问题描述</h3><p>我们考虑一个联邦学习场景，其中有一个客户端集合 $\mathcal{N}&#x3D;{1,2,\dots,N}$ 和一个中心服务器。每个客户端 $i$ 拥有一个私有数据集 $D_i$，并选择一个<em>贡献水平</em> $q_i\ge0$，例如表示本地训练的轮数或数据量。较大的 $q_i$ 通常会提高全局模型的准确率，但会产生线性成本 $C_i(q_i)&#x3D;c_iq_i$，其中 $c_i&gt;0$ 包含了计算、能源和隐私估值的成本。</p>
-<p>服务器在每一轮根据比例共享规则 [cong2020gametheoretic] 分配固定的奖励预算 $B$：<br>$$ R_i(\mathbf{q})&#x3D;\begin{cases} \frac{q_i}{\sum_{j&#x3D;1}^N q_j}B, &amp; \sum_{j&#x3D;1}^N q_j&gt;0,\ 0, &amp; \sum_{j&#x3D;1}^N q_j&#x3D;0. \end{cases} \quad (\text{式 } 3) $$<br>因此，客户端 $i$ 的（基础）效用为：<br>$$ \nu_i^0(q_i;\mathbf{q}<em>{-i}) &#x3D;\frac{q_i}{q_i+\sum</em>{j\ne i}q_j}B - c_i q_i, \quad (\text{式 } 4) $$<br>这导致了一个非合作博弈，其中每个客户端通过选择 $q_i$ 来最大化 $\nu_i^0$。</p>
+<p>服务器在每一轮根据比例共享规则 [cong2020gametheoretic] 分配固定的奖励预算 $B$：<br>$$ R_i(\mathbf{q})&#x3D;\begin{cases} \frac{q_i}{\sum_{j&#x3D;1}^N q_j}B, &amp; \sum_{j&#x3D;1}^N q_j&gt;0,\ 0, &amp; \sum_{j&#x3D;1}^N q_j&#x3D;0. \end{cases} \quad (\text{式 } 3) $$<br>因此，客户端 $i$ 的（基础）效用为：<br>$$ \nu_i^0(q_i;\mathbf{q}_{-i}) &#x3D;\frac{q_i}{q_i+\sum_{j\ne i}q_j}B - c_i q_i, \quad (\text{式 } 4) $$<br>这导致了一个非合作博弈，其中每个客户端通过选择 $q_i$ 来最大化 $\nu_i^0$。</p>
 <p>差分隐私的考虑可以通过将更严格的隐私预算 $\varepsilon$ 映射到更高的成本系数 $c_i$ 来体现。</p>
-<h3 id="3-2-纳什均衡的存在性与特征"><a href="#3-2-纳什均衡的存在性与特征" class="headerlink" title="3.2 纳什均衡的存在性与特征"></a>3.2 纳什均衡的存在性与特征</h3><p>令 $K&#x3D;\sum_{j\ne i}q_j$。对于 $q_i&gt;0$，最大化 $\nu_i^0$ 的一阶条件是：<br>$$ \frac{\partial\nu_i^0}{\partial q_i} &#x3D; B,\frac{K}{(K+q_i)^2} - c_i &#x3D; 0. \quad (\text{式 } 5) $$<br>求解可得最优响应函数 [cong2020gametheoretic, Eq.~(3)]：<br>$$ \mathrm{BR}<em>i(K)&#x3D;\begin{cases} 0, &amp; \sqrt{\tfrac{BK}{c_i}}\le K,\ \sqrt{\tfrac{BK}{c_i}}-K, &amp; \text{otherwise.} \end{cases} \quad (\text{式 } 6) $$<br>由于 $\nu_i^0$ 关于 $q_i$ 是严格凹的，根据标准的不动点理论，纳什均衡存在 [cong2020gametheoretic]。在同质情况下（即对所有 $i$，$c_i&#x3D;c$），对称性意味着 $q_i^<em>&#x3D;q^</em>$，其中：<br>$$ q^<em>&#x3D;\frac{B(N-1)}{cN^2}, \quad (\text{式 } 7) $$<br>这是通过求解 $q^</em>&#x3D;\sqrt{\frac{B(N-1)q^<em>}{c}}-(N-1)q^</em>$ 得到的。异质成本情况下，通过求解以下方程组可得唯一均衡：<br>$$ B\frac{\sum</em>{j\ne i}q_j^<em>}{(\sum_{j&#x3D;1}^N q_j^</em>)^2}&#x3D;c_i \quad\forall i. \quad (\text{式 } 8) $$</p>
-<h3 id="3-3-最优响应动态的收敛性"><a href="#3-3-最优响应动态的收敛性" class="headerlink" title="3.3 最优响应动态的收敛性"></a>3.3 最优响应动态的收敛性</h3><p>定义同步更新 $q_i^{(t+1)}&#x3D;\mathrm{BR}<em>i(\sum</em>{j\ne i}q_j^{(t)})$。该博弈拥有一个势函数：<br>$$ P(\mathbf{q}) &#x3D; B\ln\Bigl(\sum_{j&#x3D;1}^N q_j\Bigr) - \sum_{j&#x3D;1}^N c_j q_j, \quad (\text{式 } 9) $$<br>其关于 $q_i$ 的偏导数与 $\partial\nu_i^0&#x2F;\partial q_i$ 相匹配。因此，$P(\mathbf{q})$ 在最优响应更新下是非递减的且有上界，这意味着全局收敛 $q^{(t)}\to q^*$ [cong2020gametheoretic, Sec.~3.1]。</p>
-<h3 id="3-4-隐私-效用权衡"><a href="#3-4-隐私-效用权衡" class="headerlink" title="3.4 隐私-效用权衡"></a>3.4 隐私-效用权衡</h3><p>如果更严格的隐私要求使得每个成本增加到 $c_i’&#x3D;\eta c_i$（其中 $\eta&gt;1$），那么同质均衡变为：<br>$$ q_i^<em>(\eta)&#x3D;\frac{B(N-1)}{\eta c N^2}&#x3D;\frac{q_i^</em>}{\eta}, \quad (\text{式 } 10) $$<br>因此总贡献和准确率会下降 $1&#x2F;\eta$ 倍。通过将预算增加到 $B’&#x3D;\eta B$ 可以保持 $q_i^*$ 和准确率不变。</p>
-<h3 id="3-5-带公平性惩罚的效用-方法-I"><a href="#3-5-带公平性惩罚的效用-方法-I" class="headerlink" title="3.5 带公平性惩罚的效用 (方法 I)"></a>3.5 带公平性惩罚的效用 (方法 I)</h3><p>为了在博弈中明确地引入公平性，我们通过增加一个公平性惩罚项来扩展基础效用 $\nu_i^0$。定义：<br>$$ \nu_i(q_i;\mathbf{q}<em>{-i}) &#x3D; \alpha,\nu_i^0(q_i;\mathbf{q}</em>{-i}) - (1-\alpha),f_i(\mathbf q),\quad 0\le\alpha\le1, \quad (\text{式 } 11) $$<br>其中 $f_i(\mathbf q)&#x3D;\bigl(\tfrac{q_i}{\sum_jq_j}-\tfrac1N\bigr)^2$ 用于衡量与均等贡献的偏差。</p>
-<h3 id="3-6-演化博弈动态与收敛速率"><a href="#3-6-演化博弈动态与收敛速率" class="headerlink" title="3.6 演化博弈动态与收敛速率"></a>3.6 演化博弈动态与收敛速率</h3><p>为了刻画客户端收敛到纳什均衡的速度，我们将同步最优响应替换为基于势函数 (式 9) 的离散时间梯度上升更新。考虑更新规则：<br>$$ q_i^{(t+1)} &#x3D; q_i^{(t)} ;+;\eta,\frac{\partial P}{\partial q_i}\Bigl(\mathbf q^{(t)}\Bigr) ;&#x3D;;q_i^{(t)} + \eta\Bigl(\tfrac{B}{\sum_jq_j^{(t)}} - c_i\Bigr), \quad (\text{式 } 12) $$<br>其中 $\eta&gt;0$ 是一个恒定的步长。</p>
-<p><strong>强凹性和 Lipschitz 梯度</strong><br>可以证明 $P(\mathbf q)$ 在定义域 $q_i &gt; 0$ 上是 $m$-强凹的，并且其梯度是 $L$-Lipschitz 连续的，其近似界为：<br>$$ m \approx \min_i c_i, \quad L \approx \max\Bigl{\tfrac{B}{(\sum_j q_j^{\min})^2},,\max_i c_i\Bigr}, \quad (\text{式 } 13) $$<br>其中 $\sum_j q_j^{\min}&gt;0$ 是总贡献的一个正的下界。</p>
-<p><strong>线性收敛</strong><br>根据强凹函数梯度上升的标准结果 [nesterov2004introductory]，如果我们选择：<br>$$ 0&lt;\eta&lt;\frac{2}{L+m}, \quad (\text{式 } 14) $$<br>那么迭代满足线性速率界：<br>$$ P(\mathbf q^<em>) - P(\mathbf q^{(t)}) ;\le; \bigl(1 - \eta m\bigr)^t\bigl[P(\mathbf q^</em>) - P(\mathbf q^{(0)})\bigr]. \quad (\text{式 } 15) $$<br>这意味着收敛到唯一均衡点 $\mathbf q^<em>$，且：<br>$$ |\mathbf q^{(t)} - \mathbf q^</em>|_2 &#x3D; O\bigl((1-\eta m)^{t&#x2F;2}\bigr). \quad (\text{式 } 16) $$</p>
+<h3 id="3-2-纳什均衡的存在性与特征"><a href="#3-2-纳什均衡的存在性与特征" class="headerlink" title="3.2 纳什均衡的存在性与特征"></a>3.2 纳什均衡的存在性与特征</h3><p>令 $K&#x3D;\sum_{j\ne i}q_j$。对于 $q_i&gt;0$，最大化 $\nu_i^0$ 的一阶条件是：<br>$$ \frac{\partial\nu_i^0}{\partial q_i} &#x3D; B \frac{K}{(K+q_i)^2} - c_i &#x3D; 0. \quad (\text{式 } 5) $$<br>求解可得最优响应函数 [cong2020gametheoretic, Eq.~(3)]：<br>$$ \mathrm{BR}_i(K)&#x3D;\begin{cases} 0, &amp; \sqrt{\tfrac{BK}{c_i}}\le K,\ \sqrt{\tfrac{BK}{c_i}}-K, &amp; \text{otherwise.} \end{cases} \quad (\text{式 } 6) $$<br>由于 $\nu_i^0$ 关于 $q_i$ 是严格凹的，根据标准的不动点理论，纳什均衡存在 [cong2020gametheoretic]。在同质情况下（即对所有 $i$，$c_i&#x3D;c$），对称性意味着 $q_i^{\ast}&#x3D;q^{\ast}$，其中：<br>$$ q^{\ast}&#x3D;\frac{B(N-1)}{cN^2}, \quad (\text{式 } 7) $$<br>这是通过求解 $q^{\ast}&#x3D;\sqrt{\frac{B(N-1)q^{\ast}}{c}}-(N-1)q^{\ast}$ 得到的。异质成本情况下，通过求解以下方程组可得唯一均衡：<br>$$ B\frac{\sum_{j\ne i}q_j^{\ast}}{(\sum_{j&#x3D;1}^N q_j^{\ast})^2}&#x3D;c_i \quad\forall i. \quad (\text{式 } 8) $$</p>
+<h3 id="3-3-最优响应动态的收敛性"><a href="#3-3-最优响应动态的收敛性" class="headerlink" title="3.3 最优响应动态的收敛性"></a>3.3 最优响应动态的收敛性</h3><p>定义同步更新 $q_i^{(t+1)}&#x3D;\mathrm{BR}_i(\sum_{j\ne i}q_j^{(t)})$。该博弈拥有一个势函数：<br>$$ P(\mathbf{q}) &#x3D; B\ln\Bigl(\sum_{j&#x3D;1}^N q_j\Bigr) - \sum_{j&#x3D;1}^N c_j q_j, \quad (\text{式 } 9) $$<br>其关于 $q_i$ 的偏导数与 $\partial\nu_i^0&#x2F;\partial q_i$ 相匹配。因此，$P(\mathbf{q})$ 在最优响应更新下是非递减的且有上界，这意味着全局收敛 $q^{(t)}\to q^{\ast}$ [cong2020gametheoretic, Sec.~3.1]。</p>
+<h3 id="3-4-隐私-效用权衡"><a href="#3-4-隐私-效用权衡" class="headerlink" title="3.4 隐私-效用权衡"></a>3.4 隐私-效用权衡</h3><p>如果更严格的隐私要求使得每个成本增加到 $c_i’&#x3D;\eta c_i$（其中 $\eta&gt;1$），那么同质均衡变为：<br>$$ q_i^{\ast}(\eta)&#x3D;\frac{B(N-1)}{\eta c N^2}&#x3D;\frac{q_i^{\ast}}{\eta}, \quad (\text{式 } 10) $$<br>因此总贡献和准确率会下降 $1&#x2F;\eta$ 倍。通过将预算增加到 $B’&#x3D;\eta B$ 可以保持 $q_i^{\ast}$ 和准确率不变。</p>
+<h3 id="3-5-带公平性惩罚的效用-方法-I"><a href="#3-5-带公平性惩罚的效用-方法-I" class="headerlink" title="3.5 带公平性惩罚的效用 (方法 I)"></a>3.5 带公平性惩罚的效用 (方法 I)</h3><p>为了在博弈中明确地引入公平性，我们通过增加一个公平性惩罚项来扩展基础效用 $\nu_i^0$。定义：<br>$$ \nu_i(q_i;\mathbf{q}_{-i}) &#x3D; \alpha \nu_i^0(q_i;\mathbf{q}_{-i}) - (1-\alpha) f_i(\mathbf q),\quad 0\le\alpha\le1, \quad (\text{式 } 11) $$<br>其中 $f_i(\mathbf q)&#x3D;\bigl(\tfrac{q_i}{\sum_j q_j}-\tfrac1N\bigr)^2$ 用于衡量与均等贡献的偏差。</p>
+<h3 id="3-6-演化博弈动态与收敛速率"><a href="#3-6-演化博弈动态与收敛速率" class="headerlink" title="3.6 演化博弈动态与收敛速率"></a>3.6 演化博弈动态与收敛速率</h3><p>为了刻画客户端收敛到纳什均衡的速度，我们将同步最优响应替换为基于势函数 (式 9) 的离散时间梯度上升更新。考虑更新规则：<br>$$ q_i^{(t+1)} &#x3D; q_i^{(t)} + \eta \frac{\partial P}{\partial q_i}\Bigl(\mathbf q^{(t)}\Bigr) &#x3D; q_i^{(t)} + \eta\Bigl(\tfrac{B}{\sum_j q_j^{(t)}} - c_i\Bigr), \quad (\text{式 } 12) $$<br>其中 $\eta&gt;0$ 是一个恒定的步长。</p>
+<p><strong>强凹性和 Lipschitz 梯度</strong><br>可以证明 $P(\mathbf q)$ 在定义域 $q_i &gt; 0$ 上是 $m$-强凹的，并且其梯度是 $L$-Lipschitz 连续的，其近似界为：<br>$$ m \approx \min_i c_i, \quad L \approx \max{\tfrac{B}{(\sum_j q_j^{\min})^2},\max_i c_i}, \quad (\text{式 } 13) $$<br>其中 $\sum_j q_j^{\min}&gt;0$ 是总贡献的一个正的下界。</p>
+<p><strong>线性收敛</strong><br>根据强凹函数梯度上升的标准结果 [nesterov2004introductory]，如果我们选择：<br>$$ 0&lt;\eta&lt;\frac{2}{L+m}, \quad (\text{式 } 14) $$<br>那么迭代满足线性速率界：<br>$$ P(\mathbf q^{\ast}) - P(\mathbf q^{(t)}) \le \bigl(1 - \eta m\bigr)^t\bigl[P(\mathbf q^{\ast}) - P(\mathbf q^{(0)})\bigr]. \quad (\text{式 } 15) $$<br>这意味着收敛到唯一均衡点 $\mathbf q^{\ast}$，且：<br>$$ |\mathbf q^{(t)} - \mathbf q^{\ast}|_2 &#x3D; O\bigl((1-\eta m)^{t&#x2F;2}\bigr). \quad (\text{式 } 16) $$</p>
 <p><strong>讨论</strong></p>
 <ul>
 <li>收敛速率 $(1-\eta m)$ 表明，较大的成本（较大的 $m$）实际上会<strong>加速</strong>收敛，但代价是均衡贡献较低。</li>
 <li>改变步长 $\eta$ 可以在<strong>速度</strong>和<strong>稳定性</strong>之间进行权衡。</li>
 <li>在实验部分 (见后文 第4节)，可以比较在最优响应动态和这种梯度动态下达到纳什均衡 $\varepsilon$-邻域所需的迭代次数。</li>
 </ul>
-<h3 id="3-7-统一参数化博弈模型"><a href="#3-7-统一参数化博弈模型" class="headerlink" title="3.7 统一参数化博弈模型"></a>3.7 统一参数化博弈模型</h3><p>我们引入一个统一的参数化博弈：<br>$$ \mathcal G(\alpha);&#x3D;;\bigl\langle {1,\dots,N},;{q_i\ge0},;{\nu_i(q;\alpha)}\bigr\rangle \quad (\text{式 } 17) $$<br>由 $\alpha\in[0,1]$ 参数化，其客户端 $i$ 的效用来自 (式 11):<br>$$ \nu_i(q;\alpha) &#x3D;\underbrace{\alpha;\bigl[\tfrac{q_i}{\sum_{j}q_j}B - c_iq_i\bigr]}<em>{\text{accuracy–cost term}} ;-;\underbrace{(1-\alpha),f_i(q)}</em>{\text{fairness penalty}}. \quad (\text{式 } 18) $$</p>
-<p><strong>纳什均衡</strong><br>一阶条件为：<br>$$ \frac{\partial\nu_i}{\partial q_i} &#x3D;\alpha\bigl[B\tfrac{\sum_{j\neq i}q_j}{(\sum_jq_j)^2}-c_i\bigr] ;-;(1-\alpha),\frac{\partial f_i}{\partial q_i} &#x3D;0 \quad (\text{式 } 19) $$<br>广义最优响应为 $\mathrm{BR}<em>i(q</em>{-i};\alpha) &#x3D; \arg\max_{q_i\ge0}\nu_i(q_i,q_{-i};\alpha)$。对于所有 $\alpha\in[0,1]$，$\mathcal G(\alpha)$ 至少存在一个纳什均衡 [cong2020gametheoretic]。</p>
-<p><strong>势函数</strong><br>势函数定义为：<br>$$ P(q;\alpha) &#x3D; \alpha,B,\ln\Bigl(\sum_jq_j\Bigr) ;-;\sum_j\bigl[\alpha,c_jq_j + (1-\alpha),F_j(q)\bigr], \quad (\text{式 } 20) $$<br>其中 $F_j’(q)&#x3D;f_j(q)$。可以验证 $\frac{\partial P}{\partial q_i} &#x3D; \frac{\partial\nu_i}{\partial q_i}$。</p>
+<h3 id="3-7-统一参数化博弈模型"><a href="#3-7-统一参数化博弈模型" class="headerlink" title="3.7 统一参数化博弈模型"></a>3.7 统一参数化博弈模型</h3><p>我们引入一个统一的参数化博弈：<br>$$ \mathcal G(\alpha) &#x3D; \bigl\langle {1,\dots,N},;{q_i\ge0},;{\nu_i(q;\alpha)}\bigr\rangle \quad (\text{式 } 17) $$<br>由 $\alpha\in[0,1]$ 参数化，其客户端 $i$ 的效用来自 (式 11):<br>$$ \nu_i(q;\alpha) &#x3D; \underbrace{\alpha\bigl[\tfrac{q_i}{\sum_{j}q_j}B - c_iq_i\bigr]}_{\text{accuracy–cost term}} - \underbrace{(1-\alpha)f_i(q)}_{\text{fairness penalty}}. \quad (\text{式 } 18) $$</p>
+<p><strong>纳什均衡</strong><br>一阶条件为：<br>$$ \frac{\partial\nu_i}{\partial q_i} &#x3D; \alpha\bigl[B\tfrac{\sum_{j\neq i}q_j}{(\sum_jq_j)^2}-c_i\bigr] - (1-\alpha)\frac{\partial f_i}{\partial q_i} &#x3D; 0 \quad (\text{式 } 19) $$<br>广义最优响应为 $\mathrm{BR}_i(q_{-i};\alpha) &#x3D; \arg\max_{q_i\ge0}\nu_i(q_i,q_{-i};\alpha)$。对于所有 $\alpha\in[0,1]$，$\mathcal G(\alpha)$ 至少存在一个纳什均衡 [cong2020gametheoretic]。</p>
+<p><strong>势函数</strong><br>势函数定义为：<br>$$ P(q;\alpha) &#x3D; \alpha B \ln\Bigl(\sum_j q_j\Bigr) - \sum_j\bigl[\alpha c_j q_j + (1-\alpha)F_j(q)\bigr], \quad (\text{式 } 20) $$<br>其中 $F_j’(q)&#x3D;f_j(q)$。可以验证 $\frac{\partial P}{\partial q_i} &#x3D; \frac{\partial\nu_i}{\partial q_i}$。</p>
 <p><strong>两种收敛动态</strong><br>两种更新规则都沿相同的 $P$ 上升且 $P$ 有上界，因此它们都收敛到唯一的纳什均衡：</p>
 <ul>
-<li><strong>最优响应动态</strong><br>  $$ q_i^{(t+1)} &#x3D; \mathrm{BR}<em>i\bigl(q</em>{-i}^{(t)};\alpha\bigr). \quad (\text{式 } 21) $$</li>
-<li><strong>演化 (梯度上升) 动态</strong><br>  $$ \begin{split} q_i^{(t+1)} &amp;&#x3D; q_i^{(t)} + \eta,\frac{\partial P}{\partial q_i}\bigl(q^{(t)};\alpha\bigr) \ &amp;&#x3D; q_i^{(t)} + \eta\Bigl( \alpha\frac{B}{\sum_j q_j^{(t)}} - \alpha,c_i - (1-\alpha),\frac{\partial f_i}{\partial q_i} \Bigr). \end{split} \quad (\text{式 } 22) $$</li>
+<li><strong>最优响应动态</strong><br>  $$ q_i^{(t+1)} &#x3D; \mathrm{BR}_i\bigl(q_{-i}^{(t)};\alpha\bigr). \quad (\text{式 } 21) $$</li>
+<li><strong>演化 (梯度上升) 动态</strong><br>  $$ \begin{split} q_i^{(t+1)} &amp;&#x3D; q_i^{(t)} + \eta \frac{\partial P}{\partial q_i}\bigl(q^{(t)};\alpha\bigr) \ &amp;&#x3D; q_i^{(t)} + \eta\Bigl( \alpha\frac{B}{\sum_j q_j^{(t)}} - \alpha c_i - (1-\alpha)\frac{\partial f_i}{\partial q_i} \Bigr). \end{split} \quad (\text{式 } 22) $$</li>
 </ul>
 <p><strong>特殊情况</strong><br>表 1 总结了特殊情况。</p>
 <table>
@@ -425,7 +441,7 @@
 <td align="left"></td>
 </tr>
 </tbody></table>
-<p><img src="/Test-Accuracy%20vs%20Rounds.png" alt="图1：CIFAR‑10 上 FedAvg, FedProx, 和 Incentive 的测试准确率 vs. 全局轮数 (原始10轮)。"><br><em>图1：CIFAR‑10 上 FedAvg, FedProx, 和 Incentive 的测试准确率 vs. 全局轮数 (原始10轮)。</em></p>
+<p><img src="/images/Test-Accuracy%20vs%20Rounds.png" alt="图1：CIFAR‑10 上 FedAvg, FedProx, 和 Incentive 的测试准确率 vs. 全局轮数 (原始10轮)。"><br><em>图1：CIFAR‑10 上 FedAvg, FedProx, 和 Incentive 的测试准确率 vs. 全局轮数 (原始10轮)。</em></p>
 <p><strong>最终准确率和公平性</strong><br>表4 报告了第 10 轮的准确率和 Jain 指数。</p>
 <table>
 <thead>
@@ -459,9 +475,9 @@
 <h3 id="4-4-讨论-原始实验"><a href="#4-4-讨论-原始实验" class="headerlink" title="4.4 讨论 (原始实验)"></a>4.4 讨论 (原始实验)</h3><p>在 MNIST 上，所有三种方法都达到了相当的准确率，但只有我们的 Incentive 机制基于同质 $q_i^*$ 达到了完美的公平性 ($J&#x3D;1$)。在 CIFAR‑10 的 10 轮实验中，Incentive 的最终准确率与 FedAvg 相当 (54.04% vs. 54.13%)，同时将贡献公平性从 0.9091 提高到了 1.0 (见表4)。每轮曲线显示了相似的初始收敛速率。这些初步结果证明了我们的机制在简化条件下具备有效性和公平性。</p>
 <h3 id="4-5-扩展评估与效率分析"><a href="#4-5-扩展评估与效率分析" class="headerlink" title="4.5 扩展评估与效率分析"></a>4.5 扩展评估与效率分析</h3><p>我们在 CIFAR-10 上进行了扩展评估，以考察在更多轮次和不同数据分布下针对额外基准算法的性能。</p>
 <p><strong>100 轮准确率</strong><br>图2 比较了 FedAvg, FedProx, 和 Incentive ($q^*&#x3D;100$) 在 $K&#x3D;10$ 个客户端设置下运行 100 轮的结果。我们的 Incentive 机制达到了 68.24% 的最终准确率，略高于 FedAvg (66.68%) 和 FedProx (66.86%)。这表明我们的方法保持了竞争力，并且在这种配置下，即使在更长的训练周期中也能提供性能优势。</p>
-<p><img src="/100rounds.png" alt="图2：CIFAR-10 上 100 轮准确率对比 ($K&#x3D;10$)。Incentive 显示出微弱优势。"><br><em>图2：扩展实验：CIFAR-10 上 100 轮准确率对比 ($K&#x3D;10$)。Incentive 显示出微弱优势。</em></p>
+<p><img src="/images/100rounds.png" alt="图2：CIFAR-10 上 100 轮准确率对比 ($K&#x3D;10$)。Incentive 显示出微弱优势。"><br><em>图2：扩展实验：CIFAR-10 上 100 轮准确率对比 ($K&#x3D;10$)。Incentive 显示出微弱优势。</em></p>
 <p><strong>Non-IID下的准确率</strong><br>图3 展示了在更具挑战性的 Non-IID 设置（$K&#x3D;5$, 50 轮）下，比较 Incentive, FedCoin, 和 ShapleyFL 的结果（图中还包含了 FedAvg 和 FedProx 作为参考）。FedCoin 达到了最高的准确率（约41.0%）。我们的 Incentive 机制（约33.4%）表现不如 FedCoin 和 FedProx（约39.7%），但在后期与 ShapleyFL（约28.0%）相当。这些结果突出了 Non-IID 数据的挑战性，在这种情况下，像 FedCoin（这里使用简化得分）这样直接感知贡献的方法在准确率上显示出优势。</p>
-<p><img src="/plot2_selected_noniid_comparison.png" alt="图3：CIFAR-10 Non-IID 50轮准确率对比 ($K&#x3D;5$, 部分策略)。FedCoin表现最佳。"><br><em>图3：扩展实验：CIFAR-10 Non-IID 50轮准确率对比 ($K&#x3D;5$, 部分策略)。FedCoin表现最佳。</em></p>
+<p><img src="/images/plot2_selected_noniid_comparison.png" alt="图3：CIFAR-10 Non-IID 50轮准确率对比 ($K&#x3D;5$, 部分策略)。FedCoin表现最佳。"><br><em>图3：扩展实验：CIFAR-10 Non-IID 50轮准确率对比 ($K&#x3D;5$, 部分策略)。FedCoin表现最佳。</em></p>
 <p><strong>异质客户端成本下的性能</strong><br>为了评估机制在不同客户端成本 $c_i$ 下的行为，我们在 CIFAR-10 (Non-IID, 50 轮, $K&#x3D;5$) 上进行了实验，其中客户端具有低、中、高成本，并且 Incentive 机制使用 BRD 来确定 $q_i$。表5 总结了结果。我们的 <strong>Incentive</strong> 机制使得所有类型的客户端都能实现正的平均净效用，成本较低的客户端理性地贡献更多并获得更高的效用。这导致了净效用具有较高的 Jain 公平性指数 (0.815)，表明尽管存在成本差异，结果仍然是公平的。FedCoin 和 ShapleyFL 使用近似的 Shapley 值 (MC N&#x3D;2)，也产生了正效用，但净效用的 JFI 值略低。缺乏激励的 FedAvg-NoInc 导致中、高成本客户端的净效用为负，且整体公平性非常低。</p>
 <table>
 <thead>
@@ -531,7 +547,7 @@
 </tr>
 </tbody></table>
 <p><strong>激励计算效率</strong><br>图4 比较了在不同客户端数量 ($N$)下，每轮激励计算步骤所需的平均计算时间。我们的 <strong>Incentive</strong> 机制（BRD for heterogeneous costs）的时间成本能够有效扩展（例如，N&#x3D;20 时约为 0.17秒）。图中显示的 FedCoin 和 ShapleyFL 的时间反映的是一种基于简化贡献得分的<strong>理想化、接近零成本的计算</strong>，用于在此类假设下说明扩展行为。然而，真实的 Shapley 值近似会产生巨大的计算开销（在初步测试中，N&#x3D;20 时使用蒙特卡洛近似（2次迭代）每轮测量超过130秒），这使得我们的博弈论方法在实际应用中效率高出几个数量级且更具可扩展性。</p>
-<p><img src="/time_cost.png" alt="图4：激励计算时间 vs. 客户端数量。注：图中FC&#x2F;SFL时间假设了理想化的零成本得分计算；真实的Shapley近似（即使MC N&#x3D;2）要慢几个数量级。"><br><em>图4：扩展实验：激励计算时间 vs. 客户端数量。注：图中FC&#x2F;SFL时间假设了理想化的得分计算；真实的Shapley近似（即使MC N&#x3D;2）要慢几个数量级。</em></p>
+<p><img src="/images/time_cost.png" alt="图4：激励计算时间 vs. 客户端数量。注：图中FC&#x2F;SFL时间假设了理想化的零成本得分计算；真实的Shapley近似（即使MC N&#x3D;2）要慢几个数量级。"><br><em>图4：扩展实验：激励计算时间 vs. 客户端数量。注：图中FC&#x2F;SFL时间假设了理想化的得分计算；真实的Shapley近似（即使MC N&#x3D;2）要慢几个数量级。</em></p>
 <h3 id="4-6-总体讨论"><a href="#4-6-总体讨论" class="headerlink" title="4.6 总体讨论"></a>4.6 总体讨论</h3><p>我们全面的实验表明，所提出的基于博弈论的 <strong>Incentive</strong> 机制为 FL 提供了一种实用的方法。初步结果 (见 4.2节, 4.3节) 证实了其在实现与 FedAvg 和 FedProx 等标准方法相当的准确率的同时，在同质成本假设导致统一贡献时，能够确保完美的贡献公平性 ($J&#x3D;1$, 见 式 2)。</p>
 <p>扩展评估 (见 4.5节) 提供了更细致的观察。虽然 Incentive 在某些条件下（图2）经过更长的运行后能略微优于基线，并且在异质成本下能确保理性参与和正的净效用（表5），但在具有挑战性的 Non-IID 场景中（图3），其纯粹准确率落后于像 FedCoin 这样的贡献感知方法。这表明存在一种权衡：我们的机制优先考虑效率、理性参与以及由此产生的效用公平性，而试图直接量化贡献价值的方法可能会以显著的计算复杂性为代价来最大化准确率。</p>
 <p>我们方法最显著的优势在于其激励机制本身的<strong>计算效率</strong>（图4）。与 FedCoin 或 ShapleyFL 所需的真实 Shapley 值计算的巨大成本相比，我们的方法具有显著更好的可扩展性。此外，如表5所示，它确保了个体理性，为异质客户端带来了正的净效用和公平的效用分配，这对于持续参与至关重要。</p>
@@ -579,6 +595,12 @@
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 联邦学习</a>
+              <a href="/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" rel="tag"># 博弈论</a>
+              <a href="/tags/%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4/" rel="tag"># 隐私保护</a>
+              <a href="/tags/%E6%BF%80%E5%8A%B1%E6%9C%BA%E5%88%B6/" rel="tag"># 激励机制</a>
+          </div>
 
         
 
